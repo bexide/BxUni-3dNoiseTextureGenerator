@@ -41,9 +41,6 @@ public class CubeNoiseGenerator : MonoBehaviour
     private float m_frequency = 4.0f;
 
     [BoxGroup("Common Parameters"), SerializeField]
-    private SharpNoise.NoiseQuality m_quality = SharpNoise.NoiseQuality.Standard;
-
-    [BoxGroup("Common Parameters"), SerializeField]
     private bool m_isSeamless = true;
 
     [BoxGroup("Common Parameters"), SerializeField]
@@ -60,6 +57,9 @@ public class CubeNoiseGenerator : MonoBehaviour
 
     [BoxGroup("Fractal Parameters"), EnableIf("IsFractal"), SerializeField]
     private float m_persistence = 0.5f;
+
+    [BoxGroup("Fractal Parameters"), EnableIf("IsFractal"), SerializeField]
+    private SharpNoise.NoiseQuality m_quality = SharpNoise.NoiseQuality.Standard;
 
     [BoxGroup("Cell Parameters"), EnableIf("IsCell"), SerializeField]
     private SharpNoise.Modules.Cell.CellType m_cellType =
@@ -193,12 +193,15 @@ public class CubeNoiseGenerator : MonoBehaviour
 
     private void BuildTexture(SharpNoise.Modules.Module noiseSource)
     {
-        TextureFormat format = TextureFormat.R8;
-        //TextureFormat format = TextureFormat.Alpha8;
+        var format = TextureFormat.R8;
+        //var format = TextureFormat.Alpha8;
 
         // テクスチャを作成して設定を適用
-        m_texture = new Texture3D(m_gridSize, m_gridSize, m_gridSize, format, false);
-        m_texture.wrapMode = TextureWrapMode.Repeat;
+        m_texture = new Texture3D(m_gridSize, m_gridSize, m_gridSize, format, false)
+        {
+            filterMode = FilterMode.Bilinear,
+            wrapMode = m_isSeamless ? TextureWrapMode.Repeat : TextureWrapMode.Clamp
+        };
 
         // 3D配列にデータを保存
         float[] values = new float[m_gridSize * m_gridSize * m_gridSize];

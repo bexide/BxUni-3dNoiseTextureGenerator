@@ -503,7 +503,6 @@ MonoBehaviour:
   m_gridSize: 64
   m_seed: 1
   m_frequency: 2
-  m_quality: 1
   m_isSeamless: 0
   m_isInverse: 0
   m_gradient:
@@ -538,9 +537,10 @@ MonoBehaviour:
   m_lacunarity: 2
   m_octaves: 4
   m_persistence: 0.5
+  m_quality: 1
   m_cellType: 0
   m_cubeObject: {fileID: 2046374701}
-  m_previewAlpha: 0.04
+  m_previewAlpha: 0.02
   m_fileName: Example3DTexture
 --- !u!1 &2046374699
 GameObject:

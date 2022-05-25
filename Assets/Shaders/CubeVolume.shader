@@ -89,8 +89,8 @@ Shader "Unlit/VolumeShader"
                     // 単位立方体の範囲内でのみ色を累積します
                     if(max(abs(samplePosition.x), max(abs(samplePosition.y), abs(samplePosition.z))) < 0.5f + EPSILON)
                     {
-                        const float3 uvw = samplePosition + 0.5f;
-                        float4 sampledColor = tex3D(_MainTex, uvw * _Scale);
+                        const float3 uvw = samplePosition * _Scale + 0.5f;
+                        float4 sampledColor = tex3D(_MainTex, uvw);
                         
                         //const float sampleValue = sampledColor.r * _Alpha;
                         //color += (1.0 - color) * sampleValue;
