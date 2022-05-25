@@ -42,7 +42,7 @@ public class CubeNoiseGenerator : MonoBehaviour
 
     [BoxGroup("Common Parameters"), SerializeField]
     private bool m_isInverse = false;
-    
+
     [BoxGroup("Common Parameters"), SerializeField]
     private Gradient m_gradient;
 
@@ -59,15 +59,15 @@ public class CubeNoiseGenerator : MonoBehaviour
     private SharpNoise.Modules.Cell.CellType m_cellType =
         SharpNoise.Modules.Cell.CellType.Voronoi;
 
-    [BoxGroup("Cell Parameters"), EnableIf("IsCell"), SerializeField]
-    private float m_displacement = (float)SharpNoise.Modules.Cell.DefaultDisplacement;
+    //[BoxGroup("Cell Parameters"), EnableIf("IsCell"), SerializeField]
+    //private float m_displacement = (float)SharpNoise.Modules.Cell.DefaultDisplacement;
 
     [BoxGroup("Preview"), SerializeField]
     private Renderer m_cubeObject;
 
     [BoxGroup("Preview"), Range(0,1), SerializeField]
     private float m_previewAlpha = 0.04f;
-    
+
     private Texture3D m_texture;
 
     public bool IsPerlin => m_noiseType == NoiseType.Perlin;
@@ -138,7 +138,8 @@ public class CubeNoiseGenerator : MonoBehaviour
             {
                 Seed = new System.Random().Next(),
                 Frequency = m_frequency,
-                Displacement = m_displacement,
+                //EnableDistance = false,
+                //Displacement = m_displacement,
                 Type = m_cellType,
             },
             _ => throw new ArgumentException("Type mismatch")
@@ -177,7 +178,7 @@ public class CubeNoiseGenerator : MonoBehaviour
         TextureFormat format = TextureFormat.R8;
         //TextureFormat format = TextureFormat.Alpha8;
 
-        // テクスチャを作成して設定を適用 
+        // テクスチャを作成して設定を適用
         m_texture = new Texture3D(m_gridSize, m_gridSize, m_gridSize, format, false);
         m_texture.wrapMode = TextureWrapMode.Repeat;
 
@@ -238,7 +239,7 @@ public class CubeNoiseGenerator : MonoBehaviour
 
     [SerializeField]
     private string m_fileName = "Example3DTexture";
-    
+
     [Button("Save")]
     private void SaveTexture()
     {

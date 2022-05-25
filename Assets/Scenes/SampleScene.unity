@@ -501,7 +501,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_noiseType: 0
   m_gridSize: 64
-  m_frequency: 4
+  m_frequency: 2
   m_quality: 1
   m_isSeamless: 0
   m_isInverse: 0
@@ -534,11 +534,10 @@ MonoBehaviour:
     m_Mode: 0
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
-  m_lacunarity: 1
-  m_octaves: 1
+  m_lacunarity: 2
+  m_octaves: 4
   m_persistence: 0.5
-  m_cellType: 2
-  m_displacement: 1
+  m_cellType: 0
   m_cubeObject: {fileID: 2046374701}
   m_previewAlpha: 0.025
   m_fileName: Example3DTexture
