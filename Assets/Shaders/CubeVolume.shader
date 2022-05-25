@@ -9,6 +9,7 @@ Shader "Unlit/VolumeShader"
         _MainColor ("Color", Color) = (1,1,1,1)
         _Alpha ("Alpha", float) = 0.02
         _StepSize ("Step Size", float) = 0.01
+        _Scale ("Scale", float) = 1
     }
     SubShader
     {
@@ -47,6 +48,7 @@ Shader "Unlit/VolumeShader"
             float _Alpha;
             float _StepSize;
             float4 _MainColor;
+            float _Scale;
 
             v2f vert (appdata v)
             {
@@ -88,7 +90,7 @@ Shader "Unlit/VolumeShader"
                     if(max(abs(samplePosition.x), max(abs(samplePosition.y), abs(samplePosition.z))) < 0.5f + EPSILON)
                     {
                         const float3 uvw = samplePosition + 0.5f;
-                        float4 sampledColor = tex3D(_MainTex, uvw);
+                        float4 sampledColor = tex3D(_MainTex, uvw * _Scale);
                         
                         //const float sampleValue = sampledColor.r * _Alpha;
                         //color += (1.0 - color) * sampleValue;

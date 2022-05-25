@@ -17,8 +17,11 @@ public class CubeNoiseGenerator : MonoBehaviour
     public enum NoiseType
     {
         Perlin,
-        Simplex,
+        Billow,
         RidgedMulti,
+        CheckerBoard,
+        Cylinders,
+        Spheres,
         Cell,
     }
 
@@ -49,13 +52,13 @@ public class CubeNoiseGenerator : MonoBehaviour
     [BoxGroup("Common Parameters"), SerializeField]
     private Gradient m_gradient;
 
-    [BoxGroup("Perlin/Simplex/RidgedMulti Parameters"), EnableIf("IsPSR"), SerializeField]
+    [BoxGroup("Fractal Parameters"), EnableIf("IsFractal"), SerializeField]
     private float m_lacunarity = 2.0f;
 
-    [BoxGroup("Perlin/Simplex/RidgedMulti Parameters"), EnableIf("IsPSR"), SerializeField]
+    [BoxGroup("Fractal Parameters"), EnableIf("IsFractal"), SerializeField]
     private int m_octaves = 4;
 
-    [BoxGroup("Perlin/Simplex Parameters"), EnableIf("IsPS"), SerializeField]
+    [BoxGroup("Fractal Parameters"), EnableIf("IsFractal"), SerializeField]
     private float m_persistence = 0.5f;
 
     [BoxGroup("Cell Parameters"), EnableIf("IsCell"), SerializeField]
@@ -73,17 +76,14 @@ public class CubeNoiseGenerator : MonoBehaviour
 
     private Texture3D m_texture;
 
-    public bool IsPerlin => m_noiseType == NoiseType.Perlin;
-    public bool IsSimplex => m_noiseType == NoiseType.Simplex;
-    public bool IsRidgedMulti => m_noiseType == NoiseType.RidgedMulti;
     public bool IsCell => m_noiseType == NoiseType.Cell;
-    public bool IsPS => IsPerlin || IsSimplex;
-    public bool IsPSR => IsPerlin || IsSimplex || IsRidgedMulti;
+    public bool IsFractal => m_noiseType != NoiseType.Cell;
 
     private void OnValidate()
     {
         if (m_gradient == null)
         {
+            // グラディエント初期値
             m_gradient = new Gradient
             {
                 alphaKeys = new GradientAlphaKey[]
@@ -99,6 +99,7 @@ public class CubeNoiseGenerator : MonoBehaviour
             };
         }
 
+        // プレビュー透明度
         if (m_cubeObject != null &&
             m_cubeObject.TryGetComponent(out Renderer renderer))
         {
@@ -122,12 +123,14 @@ public class CubeNoiseGenerator : MonoBehaviour
                 Persistence = m_persistence,
                 Quality = m_quality,
             },
-            NoiseType.Simplex => new SharpNoise.Modules.Simplex
+            NoiseType.Billow => new SharpNoise.Modules.Billow
             {
+                Seed = m_seed,
                 Frequency = m_frequency,
                 Lacunarity = m_lacunarity,
                 OctaveCount = m_octaves,
                 Persistence = m_persistence,
+                Quality = m_quality,
             },
             NoiseType.RidgedMulti => new SharpNoise.Modules.RidgedMulti
             {
@@ -136,6 +139,18 @@ public class CubeNoiseGenerator : MonoBehaviour
                 Lacunarity = m_lacunarity,
                 OctaveCount = m_octaves,
                 Quality = m_quality,
+            },
+            NoiseType.CheckerBoard => new SharpNoise.Modules.Checkerboard
+            {
+                Frequency = m_frequency,
+            },
+            NoiseType.Cylinders => new SharpNoise.Modules.Cylinders
+            {
+                Frequency = m_frequency,
+            },
+            NoiseType.Spheres => new SharpNoise.Modules.Spheres
+            {
+                Frequency = m_frequency,
             },
             NoiseType.Cell => new SharpNoise.Modules.Cell
             {
@@ -155,7 +170,7 @@ public class CubeNoiseGenerator : MonoBehaviour
     /// テクスチャ生成
     /// </summary>
     [Button("Build")]
-    private void BuildPerlin()
+    private void Build()
     {
         var noiseSource = CreateSource();
 
@@ -203,7 +218,9 @@ public class CubeNoiseGenerator : MonoBehaviour
                 for (int x = 0; x < m_gridSize; x++)
                 {
                     float noiseValue = (float)noiseSource.GetValue(
-                        x * noiseScale, y * noiseScale, z * noiseScale);
+                        x * noiseScale - 0.5,
+                        y * noiseScale - 0.5,
+                        z * noiseScale - 0.5);
 
                     min = Mathf.Min(min, noiseValue);
                     max = Mathf.Max(max, noiseValue);
@@ -216,6 +233,11 @@ public class CubeNoiseGenerator : MonoBehaviour
 #if true
         // normalize
         Debug.Log($"min={min}, max={max}");
+        if (min.Equals(max))
+        {
+            Debug.LogError("Illegal Value Range");
+            return;
+        }
         for (int i = 0; i < m_gridSize * m_gridSize * m_gridSize; i++)
         {
             float v = values[i];
@@ -238,6 +260,7 @@ public class CubeNoiseGenerator : MonoBehaviour
         m_texture.Apply();
 
         m_cubeObject.sharedMaterial.mainTexture = m_texture;
+        Debug.Log($"done");
     }
 
     [SerializeField]
@@ -249,6 +272,7 @@ public class CubeNoiseGenerator : MonoBehaviour
         // テクスチャを Unity プロジェクトに保存
         AssetDatabase.CreateAsset(m_texture, $"Assets/{m_fileName}.asset");
         AssetDatabase.SaveAssets();
+        Debug.Log($"done");
     }
 
 }
