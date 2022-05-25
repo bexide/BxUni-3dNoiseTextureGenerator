@@ -47,31 +47,31 @@ namespace SharpNoise.Modules
         /// <returns>Returns the computed value</returns>
         public override double GetValue(double x, double y, double z)
         {
-            x = x % 1.0;
-            y = y % 1.0;
-            z = z % 1.0;
-            
-            var value = GetSeamlessXYZ(x, y, z);
+            x = Repeat(x);
+            y = Repeat(y);
+            z = Repeat(z);
+
+            double value = GetSeamlessXYZ(x, y, z);
             return value;
         }
 
         private double GetSeamlessX(double x, double y, double z)
         {
-            double mult = 1.0 + SeamThickness * 2.0;
-            double nx = (x - 0.5) * mult + 0.5;
-            double value = SourceModules[0].GetValue(nx, y, z);
-            
-            if (x < SeamThickness)
+            double mult = 1.0 / (1.0 + SeamThickness * 2.0);
+            double nx = x * mult;
+            double value = SourceModules[0].GetValue(Repeat(nx), y, z);
+
+            if (x < -0.5 + SeamThickness)
             {
-                double nextX = (x + 1.0 - 0.5) * mult + 0.5;
-                double t = (x + SeamThickness) / (SeamThickness * 2.0);
-                value = Lerp(SourceModules[0].GetValue(nextX, y, z), value, t);
+                double nextX = (x + 1.0) * mult;
+                double t = (x + 0.5 + SeamThickness) / (SeamThickness * 2.0);
+                value = Lerp(SourceModules[0].GetValue(Repeat(nextX), y, z), value, t);
             }
-            else if (x > 1.0 - SeamThickness)
+            else if (x > 0.5 - SeamThickness)
             {
-                double nextX = (x - 1.0 - 0.5) * mult + 0.5;
-                double t = 1.0 - (x - (1.0 - SeamThickness)) / (SeamThickness * 2.0);
-                value = Lerp(SourceModules[0].GetValue(nextX, y, z), value, t);
+                double nextX = (x - 1.0) * mult;
+                double t = 1.0 - (x - (0.5 - SeamThickness)) / (SeamThickness * 2.0);
+                value = Lerp(SourceModules[0].GetValue(Repeat(nextX), y, z), value, t);
             }
 
             return value;
@@ -79,21 +79,21 @@ namespace SharpNoise.Modules
 
         private double GetSeamlessXY(double x, double y, double z)
         {
-            double mult = 1.0 + SeamThickness * 2.0;
-            double ny = (y - 0.5) * mult + 0.5;
+            double mult = 1.0 / (1.0 + SeamThickness * 2.0);
+            double ny = y * mult;
             double value = GetSeamlessX(x, ny, z);
-            
-            if (y < SeamThickness)
+
+            if (y < -0.5 + SeamThickness)
             {
-                double nextY = (y + 1.0 - 0.5) * mult + 0.5;
-                double t = (y + SeamThickness) / (SeamThickness * 2.0);
-                value = Lerp(GetSeamlessX(x, nextY, z), value, t);
+                double nextY = (y + 1.0) * mult;
+                double t = (y + 0.5 + SeamThickness) / (SeamThickness * 2.0);
+                value = Lerp(GetSeamlessX(x, Repeat(nextY), z), value, t);
             }
-            else if (y > 1.0 - SeamThickness)
+            else if (y > 0.5 - SeamThickness)
             {
-                double nextY = (y - 1.0 - 0.5) * mult + 0.5;
-                double t = 1.0 - (y - (1.0 - SeamThickness)) / (SeamThickness * 2.0);
-                value = Lerp(GetSeamlessX(x, nextY, z), value, t);
+                double nextY = (y - 1.0) * mult;
+                double t = 1.0 - (y - (0.5 - SeamThickness)) / (SeamThickness * 2.0);
+                value = Lerp(GetSeamlessX(x, Repeat(nextY), z), value, t);
             }
 
             return value;
@@ -101,24 +101,29 @@ namespace SharpNoise.Modules
 
         private double GetSeamlessXYZ(double x, double y, double z)
         {
-            double mult = 1.0 + SeamThickness * 2.0;
-            double nz = (z - 0.5) * mult + 0.5;
+            double mult = 1.0 / (1.0 + SeamThickness * 2.0);
+            double nz = z * mult;
             double value = GetSeamlessXY(x, y, nz);
-            
-            if (z < SeamThickness)
+
+            if (z < -0.5 + SeamThickness)
             {
-                double nextZ = (z + 1.0 - 0.5) * mult + 0.5;
-                double t = (z + SeamThickness) / (SeamThickness * 2.0);
-                value = Lerp(GetSeamlessXY(x, y, nextZ), value, t);
+                double nextZ = (z + 1.0) * mult;
+                double t = (z + 0.5 + SeamThickness) / (SeamThickness * 2.0);
+                value = Lerp(GetSeamlessXY(x, y, Repeat(nextZ)), value, t);
             }
-            else if (z > 1.0 - SeamThickness)
+            else if (z > 0.5 - SeamThickness)
             {
-                double nextZ = (z - 1.0 - 0.5) * mult + 0.5;
-                double t = 1.0 - (z - (1.0 - SeamThickness)) / (SeamThickness * 2.0);
-                value = Lerp(GetSeamlessXY(x, y, nextZ), value, t);
+                double nextZ = (z - 1.0) * mult;
+                double t = 1.0 - (z - (0.5 - SeamThickness)) / (SeamThickness * 2.0);
+                value = Lerp(GetSeamlessXY(x, y, Repeat(nextZ)), value, t);
             }
 
             return value;
+        }
+
+        private double Repeat(double v)
+        {
+            return (v + 0.5) % 1.0 - 0.5;
         }
 
         private double Lerp(double a, double b, double t)
