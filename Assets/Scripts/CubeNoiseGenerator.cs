@@ -32,6 +32,9 @@ public class CubeNoiseGenerator : MonoBehaviour
     private int m_gridSize = 32;
 
     [BoxGroup("Common Parameters"), SerializeField]
+    private int m_seed = 1;
+
+    [BoxGroup("Common Parameters"), SerializeField]
     private float m_frequency = 4.0f;
 
     [BoxGroup("Common Parameters"), SerializeField]
@@ -112,7 +115,7 @@ public class CubeNoiseGenerator : MonoBehaviour
         {
             NoiseType.Perlin => new SharpNoise.Modules.Perlin
             {
-                Seed = new System.Random().Next(),
+                Seed = m_seed,
                 Frequency = m_frequency,
                 Lacunarity = m_lacunarity,
                 OctaveCount = m_octaves,
@@ -128,7 +131,7 @@ public class CubeNoiseGenerator : MonoBehaviour
             },
             NoiseType.RidgedMulti => new SharpNoise.Modules.RidgedMulti
             {
-                Seed = new System.Random().Next(),
+                Seed = m_seed,
                 Frequency = m_frequency,
                 Lacunarity = m_lacunarity,
                 OctaveCount = m_octaves,
@@ -136,7 +139,7 @@ public class CubeNoiseGenerator : MonoBehaviour
             },
             NoiseType.Cell => new SharpNoise.Modules.Cell
             {
-                Seed = new System.Random().Next(),
+                Seed = m_seed,
                 Frequency = m_frequency,
                 //EnableDistance = false,
                 //Displacement = m_displacement,
