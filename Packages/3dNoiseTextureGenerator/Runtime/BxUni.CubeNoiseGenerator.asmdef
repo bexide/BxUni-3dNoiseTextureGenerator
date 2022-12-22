@@ -1,0 +1,17 @@
+{
+    "name": "BxUni.CubeNoiseGenerator",
+    "rootNamespace": "",
+    "references": [
+        "GUID:075c471389f708f46a0410f2d4221eaf",
+        "GUID:776d03a35f1b52c4a9aed9f56d7b4229"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

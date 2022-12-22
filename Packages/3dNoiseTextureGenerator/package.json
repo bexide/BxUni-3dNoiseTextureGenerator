@@ -1,0 +1,19 @@
+{
+  "name": "jp.co.bexide.bxuni.3dnoisetexturegenerator",
+  "displayName": "BxUni 3D Noise Texture Generator",
+  "description": "3D-Noise texture generation tool",
+  "version": "1.0.0",
+  "unity": "2020.3",
+  "documentationUrl": "",
+  "licensesUrl": "",
+  "author": {
+    "name": "BeXide, Inc." 
+  },
+  "category": "BX-lib",
+  "publishConfig": {
+    "registry": "https://package.openupm.com"
+  },
+  "dependencies": {
+    "com.unity.editorcoroutines": "1.0.0"
+  }
+}
