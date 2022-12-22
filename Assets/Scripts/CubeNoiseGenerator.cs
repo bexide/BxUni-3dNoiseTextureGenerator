@@ -71,12 +71,12 @@ public class CubeNoiseGenerator : MonoBehaviour
     [BoxGroup("Preview"), SerializeField]
     private Renderer m_cubeObject;
 
-    [BoxGroup("Preview"), Range(0,1), SerializeField]
+    [BoxGroup("Preview"), Range(0, 1), SerializeField]
     private float m_previewAlpha = 0.04f;
 
     private Texture3D m_texture;
 
-    public bool IsCell => m_noiseType == NoiseType.Cell;
+    public bool IsCell    => m_noiseType == NoiseType.Cell;
     public bool IsFractal => m_noiseType != NoiseType.Cell;
 
     private void OnValidate()
@@ -86,10 +86,7 @@ public class CubeNoiseGenerator : MonoBehaviour
             // グラディエント初期値
             m_gradient = new Gradient
             {
-                alphaKeys = new GradientAlphaKey[]
-                {
-                    new GradientAlphaKey(1, 1)
-                },
+                alphaKeys = new GradientAlphaKey[] { new GradientAlphaKey(1, 1) },
                 colorKeys = new GradientColorKey[]
                 {
                     new GradientColorKey(Color.black, 0),
@@ -116,34 +113,31 @@ public class CubeNoiseGenerator : MonoBehaviour
         {
             NoiseType.Perlin => new SharpNoise.Modules.Perlin
             {
-                Seed = m_seed,
-                Frequency = m_frequency,
-                Lacunarity = m_lacunarity,
+                Seed        = m_seed,
+                Frequency   = m_frequency,
+                Lacunarity  = m_lacunarity,
                 OctaveCount = m_octaves,
                 Persistence = m_persistence,
-                Quality = m_quality,
+                Quality     = m_quality,
             },
             NoiseType.Billow => new SharpNoise.Modules.Billow
             {
-                Seed = m_seed,
-                Frequency = m_frequency,
-                Lacunarity = m_lacunarity,
+                Seed        = m_seed,
+                Frequency   = m_frequency,
+                Lacunarity  = m_lacunarity,
                 OctaveCount = m_octaves,
                 Persistence = m_persistence,
-                Quality = m_quality,
+                Quality     = m_quality,
             },
             NoiseType.RidgedMulti => new SharpNoise.Modules.RidgedMulti
             {
-                Seed = m_seed,
-                Frequency = m_frequency,
-                Lacunarity = m_lacunarity,
+                Seed        = m_seed,
+                Frequency   = m_frequency,
+                Lacunarity  = m_lacunarity,
                 OctaveCount = m_octaves,
-                Quality = m_quality,
+                Quality     = m_quality,
             },
-            NoiseType.CheckerBoard => new SharpNoise.Modules.Checkerboard
-            {
-                Frequency = m_frequency,
-            },
+            NoiseType.CheckerBoard => new SharpNoise.Modules.Checkerboard { },
             NoiseType.Cylinders => new SharpNoise.Modules.Cylinders
             {
                 Frequency = m_frequency,
@@ -154,7 +148,7 @@ public class CubeNoiseGenerator : MonoBehaviour
             },
             NoiseType.Cell => new SharpNoise.Modules.Cell
             {
-                Seed = m_seed,
+                Seed      = m_seed,
                 Frequency = m_frequency,
                 //EnableDistance = false,
                 //Displacement = m_displacement,
@@ -200,16 +194,16 @@ public class CubeNoiseGenerator : MonoBehaviour
         m_texture = new Texture3D(m_gridSize, m_gridSize, m_gridSize, format, false)
         {
             filterMode = FilterMode.Bilinear,
-            wrapMode = m_isSeamless ? TextureWrapMode.Repeat : TextureWrapMode.Clamp
+            wrapMode   = m_isSeamless ? TextureWrapMode.Repeat : TextureWrapMode.Clamp
         };
 
         // 3D配列にデータを保存
         float[] values = new float[m_gridSize * m_gridSize * m_gridSize];
-        byte[] pixels = new byte[m_gridSize * m_gridSize * m_gridSize];
+        byte[]  pixels = new byte[m_gridSize * m_gridSize * m_gridSize];
 
         float noiseScale = 1.0f / m_gridSize;
-        float min = Single.MaxValue;
-        float max = Single.MinValue;
+        float min        = Single.MaxValue;
+        float max        = Single.MinValue;
 
         // 配列に入力
         for (int z = 0; z < m_gridSize; z++)
@@ -243,9 +237,9 @@ public class CubeNoiseGenerator : MonoBehaviour
         }
         for (int i = 0; i < m_gridSize * m_gridSize * m_gridSize; i++)
         {
-            float v = values[i];
+            float v          = values[i];
             float noiseValue = (v - min) / (max - min);
-            var color = m_gradient.Evaluate(noiseValue);
+            var   color      = m_gradient.Evaluate(noiseValue);
             pixels[i] = (byte)Mathf.FloorToInt(color.r * 255.0f);
         }
 #else
