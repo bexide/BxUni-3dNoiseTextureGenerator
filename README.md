@@ -1,5 +1,11 @@
-# 3D Noise Texture Generator #
+# 3D Noise Texture Generator
 
-* usage
+3次元ノイズテクスチャアセットを生成するエディタ拡張
 
-Open in Unity, refer inspector on Object "Generator"
+## ドキュメント
+
+[Missing Finder](Packages/3dNoiseTextureGenerator/Documentation~/index.md)
+
+## ライセンス
+
+[LICENSE](Packages/3dNoiseTextureGenerator/LICENSE.md)
