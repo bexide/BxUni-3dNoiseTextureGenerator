@@ -4,7 +4,7 @@
 
 ## ドキュメント
 
-[Missing Finder](Packages/3dNoiseTextureGenerator/Documentation~/index.md)
+[3D Noise Texture Generator](Packages/3dNoiseTextureGenerator/Documentation~/index.md)
 
 ## ライセンス
 
