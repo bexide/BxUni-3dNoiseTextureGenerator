@@ -1,5 +1,7 @@
 ﻿# 3D Noise Texture Generator
 
+![](images/ntg00.png)
+
 ## 概要
 
 3次元ノイズテクスチャアセットを生成するエディタ拡張です
