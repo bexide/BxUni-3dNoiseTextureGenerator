@@ -126,18 +126,6 @@ namespace BxUni.NoiseTextureGenerator
             {
                 Clear();
             }
-            EditorGUILayout.EndHorizontal();
-
-            // preview
-            if (m_editor)
-            {
-                EditorGUILayout.BeginHorizontal();
-                m_editor.OnPreviewSettings();
-                EditorGUILayout.EndHorizontal();
-                var rect = GUILayoutUtility.GetAspectRect(1f);
-                m_editor.OnInteractivePreviewGUI(rect, GUIStyle.none);
-            }
-
             if (m_texture != null &&
                 GUILayout.Button("Save Texture"))
             {
@@ -155,6 +143,18 @@ namespace BxUni.NoiseTextureGenerator
                 AssetDatabase.CreateAsset(m_texture, path);
                 AssetDatabase.SaveAssets();
             }
+
+            EditorGUILayout.EndHorizontal();
+            // preview
+            if (m_editor)
+            {
+                EditorGUILayout.BeginHorizontal();
+                m_editor.OnPreviewSettings();
+                EditorGUILayout.EndHorizontal();
+                var rect = GUILayoutUtility.GetAspectRect(1f);
+                m_editor.OnInteractivePreviewGUI(rect, GUIStyle.none);
+            }
+
         }
 
         /// <summary>
